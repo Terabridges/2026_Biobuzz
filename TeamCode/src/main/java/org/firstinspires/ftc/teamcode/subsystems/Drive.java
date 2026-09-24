@@ -18,7 +18,7 @@ public class Drive implements Subsystem{
     double leftBackPow = 0.0;
     double rightBackPow = 0.0;
 
-//Consturcotur
+//Constuctor
     public Drive(HardwareMap map){
         backLeft = map.get(DcMotor.class, "BackLeft");
         backRight = map.get(DcMotor.class, "BackRight");
