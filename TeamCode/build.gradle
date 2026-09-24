@@ -35,6 +35,15 @@ android {
     packagingOptions {
         jniLibs.useLegacyPackaging true
     }
+
+    testOptions {
+        unitTests {
+            // Stub out android.* calls (e.g. android.util.Log) instead of throwing
+            // "not mocked". Pure classes like Rates don't need this, but anything
+            // that touches an SDK type will.
+            returnDefaultValues = true
+        }
+    }
 }
 repositories {
     // Dairy releases repository
@@ -47,4 +56,8 @@ dependencies {
     implementation("dev.frozenmilk.sinister:Sloth:0.2.4")
     implementation 'org.psilynx.psikit:core:0.2.0-beta1'
     implementation 'org.psilynx.psikit:ftc:0.2.0-beta1'
+
+    // Local JVM unit tests (src/test/java). Run with:
+    //     ./gradlew :TeamCode:testDebugUnitTest
+    testImplementation 'junit:junit:4.13.2'
 }
