@@ -51,7 +51,10 @@ public class MainTeleOp extends OpMode {
         }
 
 
-        drive.drive(-currentGamepad1.left_stick_y, currentGamepad1.left_stick_x, currentGamepad1.right_stick_x);
+        drive.drive(
+                moveRate.apply(-currentGamepad1.left_stick_y),
+                moveRate.apply(currentGamepad1.left_stick_x),
+                turnRate.apply(currentGamepad1.right_stick_x));
 
         drive.update();
         intake.update();
