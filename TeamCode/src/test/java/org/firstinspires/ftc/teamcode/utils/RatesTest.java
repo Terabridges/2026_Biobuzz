@@ -183,13 +183,11 @@ public class RatesTest {
         new Rates(1.5, 1.0, 0.6, 0.0);
     }
 
-    @Test
-    public void clampsOutOfRangeStickInput() {
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectsOutOfRangeStickInput() {
         // Nothing should be able to command more than maxRate, even if a caller
         // hands us a badly scaled value.
-        Rates r = profile();
-        assertEquals(1.0, r.apply(1.4), EPS);
-        assertEquals(-1.0, r.apply(-1.4), EPS);
+        profile().apply(1.4);
     }
 
     // ---------------------------------------------------------------- //

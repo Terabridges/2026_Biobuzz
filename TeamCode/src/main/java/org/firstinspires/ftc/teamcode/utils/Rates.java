@@ -8,6 +8,10 @@ public class Rates {
     private double deadzone;
 
     public Rates(double centerRate, double maxRate, double expo, double deadzone) {
+        if (centerRate > maxRate) {
+            throw new IllegalArgumentException("Center rate must be less than max rate.");
+        }
+
         this.centerRate = centerRate;
         this.maxRate = maxRate;
         this.expo = expo;
@@ -20,11 +24,12 @@ public class Rates {
      * @return
      */
     private double applyDeadzone(double stickPosition) {
-        if (stickPosition < deadzone) {
+        double magnitude = Math.abs(stickPosition);
+        if (magnitude < deadzone) {
             return 0.0;
         }
 
-        return (stickPosition - deadzone) / (1 - deadzone);
+        return Math.signum(stickPosition) * (magnitude - deadzone) / (1 - deadzone);
     }
 
     /**
@@ -33,11 +38,15 @@ public class Rates {
      * @return A power value representative of what we want to hand to a Drive train / motors
      */
     public double apply(double stickPosition) {
+        if (Math.abs(stickPosition) > 1) {
+            throw new IllegalArgumentException("Stick Position cannot be more than 1 or less than -1");
+        }
+
         stickPosition = applyDeadzone(stickPosition);
         double actualRatesExpoFactor =
-                stickPosition * (Math.pow(stickPosition, 5) * expo + stickPosition * (1-expo));
+                Math.abs(stickPosition) * (Math.pow(stickPosition, 5) * expo + stickPosition * (1-expo));
+
         return (centerRate * stickPosition) +
                 ((maxRate - centerRate) * actualRatesExpoFactor);
     }
-
 }
